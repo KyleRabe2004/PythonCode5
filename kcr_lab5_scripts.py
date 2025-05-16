@@ -61,3 +61,38 @@ smart_vector.save_vector("Benton_County_TaxLots_ndvi.shp")
 #  Part 3: Optional
 #  Use matplotlib to make a map of your census tracts with the average NDVI values
 
+
+from kcr_lab5_functions import SmartVector
+import matplotlib.pyplot as plt
+
+# Initialize the SmartVector object with the shapefile path
+vector_path = r"R:\2025\Spring\GEOG562\Students\rabeky\Lab5\Benton_County_TaxLots_ndvi.shp"
+smart_vector = SmartVector(vector_path)
+
+# Debugging: Check the GeoDataFrame
+print(smart_vector.gdf.head())
+print(smart_vector.gdf.columns)
+
+# Plot the map
+plt.style.use('ggplot')
+
+fig, ax = plt.subplots(figsize=(10, 10))
+
+smart_vector.gdf.plot(
+    column="mean",
+    ax=ax,
+    legend=True,
+    cmap="YlGn",
+    edgecolor="black",
+    linewidth=0.3,
+    missing_kwds={
+        "color": "lightgrey",
+        "label": "Missing values"
+    }
+)
+
+ax.set_title("Average NDVI by Taxlot", fontsize=16)
+ax.axis("off")
+
+plt.savefig("BentonCountyNDVI.png", dpi=300)
+plt.show()
