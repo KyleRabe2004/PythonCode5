@@ -92,3 +92,30 @@ class SmartRaster:
 #    that will have a method similar to what did in lab 4
 #    to calculate the zonal statistics for a raster
 #    and add them as a column to the attribute table of the vector
+
+import geopandas as gpd
+
+class SmartVector:
+    def __init__(self, vector_path):
+        """Initialize the SmartVector with a vector file path."""
+        self.vector_path = vector_path
+        self.vector_data = gpd.read_file(vector_path)
+
+    def calculate_zonal_stats(self, raster_path):
+        """Calculate zonal statistics using the vector and raster data."""
+        import rasterstats as rs
+        
+        # Perform zonal statistics
+        stats = rs.zonal_stats(
+            self.vector_path,
+            raster_path,
+            stats=["mean"],
+            geojson_out=True
+        )
+        
+        # Update the GeoDataFrame with the NDVI mean values
+        self.vector_data = gpd.GeoDataFrame.from_features(stats)
+
+    def save_vector(self, output_path):
+        """Save the updated vector data to a new shapefile."""
+        self.vector_data.to_file(output_path)

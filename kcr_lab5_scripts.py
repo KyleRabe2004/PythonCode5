@@ -36,7 +36,7 @@ smart_raster = l5.SmartRaster(landsat_path)
 
 # Calculate NDVI and save to an output file
 ndvi = smart_raster.calculate_ndvi()
-ndvi_output_path = "ndvi_output_test1.tif"
+ndvi_output_path = "ndvi_output_raster.tif"
 smart_raster.save_raster(ndvi, ndvi_output_path)
 
 
@@ -51,7 +51,13 @@ smart_raster.save_raster(ndvi, ndvi_output_path)
 
 #  Calculate zonal statistics and add to the attribute table of the parcels shapefile
 
+importlib.reload(l5)
 
+vector_path = r"R:\2025\Spring\GEOG562\Students\rabeky\Lab5\Benton_County_TaxLots.shp"
+smart_vector = l5.SmartVector(vector_path)
+smart_vector.calculate_zonal_stats(ndvi_output_path)
+smart_vector.save_vector("Benton_County_TaxLots_ndvi.shp")
 
 #  Part 3: Optional
 #  Use matplotlib to make a map of your census tracts with the average NDVI values
+
